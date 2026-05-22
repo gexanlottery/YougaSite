@@ -1,0 +1,235 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ALL
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+// ─── Users & Auth ─────────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  email        String?  @unique
+  phone        String?  @unique
+  name         String?
+  passwordHash String?
+  role         UserRole @default(USER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orders   Order[]
+  bookings Booking[]
+  accesses UserAccess[]
+
+  @@map("users")
+}
+
+// ─── Video Lessons ─────────────────────────────────────────────────────────────
+
+model VideoCategory {
+  id        String @id @default(cuid())
+  name      String
+  slug      String @unique
+  sortOrder Int    @default(0)
+
+  videos Video[]
+
+  @@map("video_categories")
+}
+
+model Video {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       String
+  shortDesc   String        @db.Text
+  fullDesc    String        @db.Text
+  categoryId  String
+  level       Level         @default(ALL)
+  duration    Int // seconds
+  coverImage   String
+  kinescopeId        String
+  kinescopePreviewId String?
+  isFree             Boolean      @default(false)
+  status      ContentStatus @default(DRAFT)
+  sortOrder   Int           @default(0)
+
+  // SEO
+  seoTitle    String?
+  seoDesc     String?
+  seoKeywords String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category VideoCategory @relation(fields: [categoryId], references: [id])
+
+  @@map("videos")
+}
+
+// ─── Events ────────────────────────────────────────────────────────────────────
+
+model Event {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       String
+  date        DateTime
+  endDate     DateTime?
+  location    String
+  price       Decimal       @db.Decimal(10, 2)
+  shortDesc   String        @db.Text
+  fullDesc    String        @db.Text
+  program     String?       @db.Text
+  included    String?       @db.Text
+  notIncluded String?       @db.Text
+  level       Level         @default(ALL)
+  coverImage  String
+  status      ContentStatus @default(DRAFT)
+
+  // SEO
+  seoTitle    String?
+  seoDesc     String?
+  seoKeywords String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings Booking[]
+
+  @@map("events")
+}
+
+// ─── Access & Orders ───────────────────────────────────────────────────────────
+
+model AccessPlan {
+  id        String  @id @default(cuid())
+  name      String
+  days      Int
+  price     Decimal @db.Decimal(10, 2)
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  userAccesses UserAccess[]
+  orders       Order[]
+
+  @@map("access_plans")
+}
+
+model UserAccess {
+  id        String   @id @default(cuid())
+  userId    String
+  planId    String
+  startDate DateTime
+  endDate   DateTime
+  orderId   String?  @unique
+  createdAt DateTime @default(now())
+
+  user  User       @relation(fields: [userId], references: [id])
+  plan  AccessPlan @relation(fields: [planId], references: [id])
+  order Order?     @relation(fields: [orderId], references: [id])
+
+  @@map("user_accesses")
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  userId        String
+  planId        String?
+  amount        Decimal     @db.Decimal(10, 2)
+  status        OrderStatus @default(PENDING)
+  paymentMethod String?
+  paymentRef    String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  user   User        @relation(fields: [userId], references: [id])
+  plan   AccessPlan? @relation(fields: [planId], references: [id])
+  access UserAccess?
+
+  @@map("orders")
+}
+
+model Booking {
+  id        String        @id @default(cuid())
+  userId    String
+  eventId   String
+  status    BookingStatus @default(PENDING)
+  comment   String?       @db.Text
+  createdAt DateTime      @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@map("bookings")
+}
+
+// ─── Reviews & FAQ ─────────────────────────────────────────────────────────────
+
+model Review {
+  id          String   @id @default(cuid())
+  name        String
+  city        String?
+  role        String?
+  text        String   @db.Text
+  photo       String?
+  isPublished Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@map("reviews")
+}
+
+model FAQ {
+  id          String   @id @default(cuid())
+  question    String
+  answer      String   @db.Text
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@map("faqs")
+}
+
+// ─── Site Content ──────────────────────────────────────────────────────────────
+
+model SiteContent {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@map("site_content")
+}

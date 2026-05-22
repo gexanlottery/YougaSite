@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l /root/yoga-kristina/components/**/*.tsx /root/yoga-kristina/app/**/*.tsx)",
+      "Bash(swapon --show)",
+      "Read(//proc/**)",
+      "Bash(ls /root/yoga-kristina/.env*)"
+    ]
+  }
+}
