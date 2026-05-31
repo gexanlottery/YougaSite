@@ -12,9 +12,9 @@ function InstagramIcon({ className }: { className?: string }) {
 }
 
 const legalLinks = [
-  { href: '/legal/privacy', label: 'Политика конфиденциальности' },
+  { href: '/offer', label: 'Публичная оферта' },
+  { href: '/privacy', label: 'Политика конфиденциальности' },
   { href: '/legal/terms', label: 'Пользовательское соглашение' },
-  { href: '/legal/offer', label: 'Оферта' },
   { href: '/legal/personal-data', label: 'Обработка персональных данных' },
 ]
 

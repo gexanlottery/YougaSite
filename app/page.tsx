@@ -233,27 +233,6 @@ export default async function HomePage() {
                     <p>{content.about_quote_p2}</p>
                   </div>
                 </div>
-
-                {/* Tags */}
-                <div className="mt-8 sm:mt-10 flex flex-wrap gap-2">
-                  {['Универсальная йога', 'Аштанга Виньяса', 'Инь-йога', 'Семинары', 'Йога-туры', 'Культура Движения'].map(
-                    (tag) => (
-                      <span
-                        key={tag}
-                        style={{
-                          fontSize: '0.75rem',
-                          padding: '0.35rem 0.9rem',
-                          border: '1px solid #e3d0b5',
-                          borderRadius: '100px',
-                          color: '#6b6560',
-                          letterSpacing: '0.03em',
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    )
-                  )}
-                </div>
               </div>
             </div>
           </div>

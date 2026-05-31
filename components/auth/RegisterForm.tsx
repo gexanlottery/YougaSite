@@ -17,7 +17,7 @@ export function RegisterForm() {
       <p className="text-xs text-ink-muted">
         Регистрируясь, вы соглашаетесь с{' '}
         <a href="/legal/terms" className="text-honey-600 hover:underline">условиями</a>{' '}и{' '}
-        <a href="/legal/privacy" className="text-honey-600 hover:underline">политикой конфиденциальности</a>
+        <a href="/privacy" className="text-honey-600 hover:underline">политикой конфиденциальности</a>
       </p>
       <Button type="submit" className="w-full" loading={isPending}>Создать аккаунт</Button>
     </form>

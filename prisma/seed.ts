@@ -43,8 +43,8 @@ async function main() {
   // Access plans
   const plans = [
     { name: 'Неделя', days: 7, price: 990, sortOrder: 1 },
-    { name: 'Месяц', days: 30, price: 2490, sortOrder: 2 },
-    { name: '3 месяца', days: 90, price: 5990, sortOrder: 3 },
+    { name: 'Месяц', days: 30, price: 3000, sortOrder: 2 },
+    { name: '3 месяца', days: 90, price: 8100, sortOrder: 3 },
   ]
 
   for (const plan of plans) {

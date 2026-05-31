@@ -15,6 +15,7 @@ interface HeaderProps {
 const navLinks = [
   { href: '/videos', label: 'Видеоуроки' },
   { href: '/events', label: 'Мероприятия' },
+  { href: '/cabinet#plans', label: 'Получить доступ' },
   { href: '/faq', label: 'FAQ' },
 ]
 

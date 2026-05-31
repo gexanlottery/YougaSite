@@ -1,12 +1,11 @@
 import { prisma } from '@/lib/prisma'
 import { formatPrice } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
-import { Check } from 'lucide-react'
 
 const defaultPlans = [
   { id: '7d', name: 'Неделя', days: 7, price: 990 },
-  { id: '30d', name: 'Месяц', days: 30, price: 2490 },
-  { id: '90d', name: '3 месяца', days: 90, price: 5990 },
+  { id: '30d', name: 'Месяц', days: 30, price: 3000 },
+  { id: '90d', name: '3 месяца', days: 90, price: 8100 },
 ]
 const paymentMethods = [
   { id: 'sbp', label: 'СБП', logo: '🏦' },
@@ -41,11 +40,6 @@ export async function AccessPlansSection() {
               {typeof plan.price === 'number' ? `${plan.price.toLocaleString('ru-RU')} ₽` : formatPrice(plan.price)}
             </div>
             <div className="text-sm text-ink-muted mb-4">{plan.days} дней доступа</div>
-            <ul className="text-xs text-ink-muted space-y-1 mb-4 text-left">
-              {['Все уроки библиотеки', 'Без ограничений просмотров', 'С любого устройства'].map(f => (
-                <li key={f} className="flex items-start gap-1.5"><Check className="w-3 h-3 text-honey-500 flex-shrink-0 mt-0.5" />{f}</li>
-              ))}
-            </ul>
             <Button size="sm" variant={idx === 1 ? 'primary' : 'secondary'} className="w-full">Оформить</Button>
           </div>
         ))}
